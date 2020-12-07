@@ -11,6 +11,7 @@ checkpoints
 .ccls-cache/
 dist/
 pointnet2.egg-info/
+pointnet2_ops.egg-info/
 *.zip
 *.so
 .tox/

@@ -9,6 +9,10 @@ from pointnet2.models.pointnet2_ssg_cls import PointNet2ClassificationSSG
 
 
 class PointNet2SemSegSSG(PointNet2ClassificationSSG):
+
+    def __init__(self, num_features: int=0):
+        self._num_features = num_features
+
     def _build_model(self):
         self.SA_modules = nn.ModuleList()
         self.SA_modules.append(
@@ -16,7 +20,7 @@ class PointNet2SemSegSSG(PointNet2ClassificationSSG):
                 npoint=1024,
                 radius=0.1,
                 nsample=32,
-                mlp=[6, 32, 32, 64],
+                mlp=[self._num_features, 32, 32, 64],
                 use_xyz=self.hparams["model.use_xyz"],
             )
         )
@@ -49,7 +53,7 @@ class PointNet2SemSegSSG(PointNet2ClassificationSSG):
         )
 
         self.FP_modules = nn.ModuleList()
-        self.FP_modules.append(PointnetFPModule(mlp=[128 + 6, 128, 128, 128]))
+        self.FP_modules.append(PointnetFPModule(mlp=[128+self._num_features, 128, 128, 128]))
         self.FP_modules.append(PointnetFPModule(mlp=[256 + 64, 256, 128]))
         self.FP_modules.append(PointnetFPModule(mlp=[256 + 128, 256, 256]))
         self.FP_modules.append(PointnetFPModule(mlp=[512 + 256, 256, 256]))
